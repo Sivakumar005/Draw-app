@@ -112,6 +112,9 @@ importers:
       '@types/node':
         specifier: ^22.15.3
         version: 22.15.3
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.2
 
   packages/common:
     dependencies:
