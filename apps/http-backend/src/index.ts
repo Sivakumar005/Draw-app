@@ -4,25 +4,28 @@ import { JWT_SECRET } from "@repo/backend-common/config";
 import { middleware } from "./middleware";
 import { CreateUserSchema, SignInSchema, CreateRoomSchema } from "@repo/common/types"
 import { prismaClient } from "@repo/db/client";
+import bcrypt, { hash } from "bcrypt";
+import { SALT_ROUNDS } from "@repo/backend-common/config";
 
 const app = express();
 app.use(express.json());
 
 app.post('/signup', async (req, res) => {
-    //db call
     const parsedData = CreateUserSchema.safeParse(req.body);
     if (!parsedData.success) {
         console.log(parsedData.error)
         res.json({
             message: "Incorrect inputs"
         })
-        return
+        return;
     }
     try {
+        const hashedPassword = await bcrypt.hash(parsedData.data.password, SALT_ROUNDS);
         const user = await prismaClient.user.create({
             data: {
                 email: parsedData.data?.username,
-                password: parsedData.data.password,
+                //hash the password
+                password: hashedPassword,
                 name: parsedData.data.name
             }
         })
@@ -50,7 +53,6 @@ app.post('/signin', async (req, res) => {
     const user = await prismaClient.user.findFirst({
         where: {
             email: parsedData.data.username,
-            password: parsedData.data.password
         }
     })
 
@@ -59,6 +61,14 @@ app.post('/signin', async (req, res) => {
             message: "not authorized"
         })
         return;
+    }
+    const isPasswordValid=await bcrypt.compare(parsedData.data.password,user.password);
+
+    if(!isPasswordValid){
+        res.status(403).json({
+            message:"Invalid credentials"
+        })
+        return
     }
 
     const token = jwt.sign({
@@ -92,9 +102,9 @@ app.post('/create-room', middleware, async (req, res) => {
         res.json({
             roomId: room.id
         })
-    }catch(err){
+    } catch (err) {
         return res.status(411).json({
-            message:"room already exists with this name"
+            message: "room already exists with this name"
         })
     }
 })
