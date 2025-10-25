@@ -39,7 +39,6 @@ app.post('/signup', async (req, res) => {
     }
 })
 
-
 app.post('/signin', async (req, res) => {
 
     const parsedData = SignInSchema.safeParse(req.body);
@@ -78,6 +77,7 @@ app.post('/signin', async (req, res) => {
         token
     })
 })
+
 app.post('/create-room', middleware, async (req, res) => {
     //db call
     const parsedData = CreateRoomSchema.safeParse(req.body);
@@ -136,6 +136,5 @@ app.get("/room/:slug",async(req,res)=>{
         room
     })
 })
-
 
 app.listen(3000);
