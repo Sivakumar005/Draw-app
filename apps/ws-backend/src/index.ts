@@ -54,7 +54,7 @@ wss.on('connection', function connection(ws, request) {
         const parsedData = JSON.parse(data as unknown as string);
         if (parsedData.type === 'join_room') {
             const user = users.find(x => x.ws === ws);
-            user?.rooms.push(parsedData.roomId);
+            user?.rooms.push(parsedData.roomId); 
         }
         if (parsedData.type === "leave_room") {
             const user = users.find(x => x.ws === ws);
