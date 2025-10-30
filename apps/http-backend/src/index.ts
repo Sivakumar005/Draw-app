@@ -6,9 +6,11 @@ import { CreateUserSchema, SignInSchema, CreateRoomSchema } from "@repo/common/t
 import { prismaClient } from "@repo/db/client";
 import bcrypt, { hash } from "bcrypt";
 import { SALT_ROUNDS } from "@repo/backend-common/config";
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.post('/signup', async (req, res) => {
     const parsedData = CreateUserSchema.safeParse(req.body);
