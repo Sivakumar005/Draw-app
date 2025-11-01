@@ -1,5 +1,5 @@
 import { WebSocket, WebSocketServer } from 'ws';
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { JWT_SECRET } from '@repo/backend-common/config';
 import { prismaClient } from "@repo/db/client";
 
@@ -79,10 +79,8 @@ wss.on('connection', function connection(ws, request) {
       const roomId = parsedData.roomId;
       const message = parsedData.message;
 
-      // ✅ Properly parse roomId as integer
       const roomIdInt = parseInt(roomId, 10);
 
-      // Check if valid
       if (isNaN(roomIdInt)) {
         console.error("Invalid roomId:", roomId);
         return;
@@ -113,5 +111,4 @@ wss.on('connection', function connection(ws, request) {
       })
     }
   });
-
 });
