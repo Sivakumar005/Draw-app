@@ -36,11 +36,8 @@ export function Canvas({
 
     }, [canvasRef]);
 
-    return <div style={{
-        height: "100vh",
-        overflow: "hidden"
-    }}>
-        <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
+    return <div className="h-screen w-screen overflow-hidden relative bg-gray-50">
+        <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} className="absolute inset-0 w-full h-full" />
         <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
     </div>
 }
@@ -49,12 +46,8 @@ function Topbar({selectedTool, setSelectedTool}: {
     selectedTool: Tool,
     setSelectedTool: (s: Tool) => void
 }) {
-    return <div style={{
-            position: "fixed",
-            top: 10,
-            left: 10
-        }}>
-            <div className="flex gap-t">
+    return <div className="fixed top-3 left-3 z-50">
+            <div className="flex gap-2 bg-white/80 backdrop-blur-sm p-2 rounded-lg shadow-md">
                 <IconButton 
                     onClick={() => {
                         setSelectedTool("line")

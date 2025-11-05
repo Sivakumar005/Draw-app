@@ -110,5 +110,37 @@ wss.on('connection', function connection(ws, request) {
         }
       })
     }
+
+    if (parsedData.type == 'deleteShape') {
+      const roomId = parsedData.roomId;
+      const shapeId = parsedData.id;
+      try {
+        const shapeMessage = await prismaClient.chat.findFirst({
+          where: {
+            roomId: parseInt(roomId, 10),
+            message: {
+              contains: shapeId
+            }
+          }
+        });
+        if (shapeMessage) {
+          await prismaClient.chat.delete({
+            where: { id: shapeMessage.id }
+          });
+        }
+        users.forEach(user => {
+          if (user.rooms.includes(roomId)) {
+            user.ws.send(JSON.stringify({
+              type: "deleteShape",
+              id: shapeId,
+              roomId
+            }));
+          }
+        }); 
+      }
+      catch (err) {
+        console.log("error deleting shape:",err);
+      }
+    }
   });
 });
