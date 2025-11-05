@@ -136,10 +136,10 @@ wss.on('connection', function connection(ws, request) {
               roomId
             }));
           }
-        }); 
+        });
       }
       catch (err) {
-        console.log("error deleting shape:",err);
+        console.log("error deleting shape:", err);
       }
     }
   });

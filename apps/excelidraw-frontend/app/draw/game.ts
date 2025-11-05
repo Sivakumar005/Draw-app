@@ -198,8 +198,8 @@ export class Game {
                 this.clearCanvas();
 
                 const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, this.eraserRadius);
-    gradient.addColorStop(0, "rgba(180, 180, 180, 0.7)");  // light grey center
-    gradient.addColorStop(1, "rgba(100, 100, 100, 0.05)");
+                gradient.addColorStop(0, "rgba(180, 180, 180, 0.7)");  // light grey center
+                gradient.addColorStop(1, "rgba(100, 100, 100, 0.05)");
                 this.ctx.strokeStyle = "rgba(255, 0, 0, 0.5)";
                 this.ctx.lineWidth = 2;
                 this.ctx.beginPath();
@@ -245,21 +245,29 @@ export class Game {
     findShapeAt(x: number, y: number): Shape | null {
         for (let shape of this.existingShapes) {
             if (shape.type === "rect") {
+                // expand detection slightly to include edges near the eraser circle
                 if (
-                    x >= shape.x &&
-                    x <= shape.x + shape.width &&
-                    y >= shape.y &&
-                    y <= shape.y + shape.height
+                    x >= shape.x - this.eraserRadius &&
+                    x <= shape.x + shape.width + this.eraserRadius &&
+                    y >= shape.y - this.eraserRadius &&
+                    y <= shape.y + shape.height + this.eraserRadius
                 ) {
                     return shape;
                 }
-            } else if (shape.type === "circle") {
+            }
+
+            else if (shape.type === "circle") {
                 const dx = x - shape.centerX;
                 const dy = y - shape.centerY;
-                if (Math.sqrt(dx * dx + dy * dy) <= shape.radius) {
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                // consider eraser radius as hit tolerance
+                if (distance <= shape.radius + this.eraserRadius) {
                     return shape;
                 }
-            } else if (shape.type === "line") {
+            }
+
+            else if (shape.type === "line") {
                 const dist = this.pointToLineDistance(
                     x,
                     y,
@@ -268,11 +276,13 @@ export class Game {
                     shape.endX,
                     shape.endY
                 );
-                if (dist < 5) return shape; // tolerance
+                // eraser radius replaces static 5px tolerance
+                if (dist < this.eraserRadius) return shape;
             }
         }
         return null;
     }
+
     pointToLineDistance(
         px: number,
         py: number,
@@ -281,6 +291,7 @@ export class Game {
         x2: number,
         y2: number
     ): number {
+        // project cursor point onto line segment and compute perpendicular distance
         const A = px - x1;
         const B = py - y1;
         const C = x2 - x1;
@@ -307,4 +318,5 @@ export class Game {
         const dy = py - yy;
         return Math.sqrt(dx * dx + dy * dy);
     }
+
 }
