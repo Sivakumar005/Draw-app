@@ -172,10 +172,8 @@ export class Game {
         if (this.clicked) {
             const width = e.clientX - this.startX;
             const height = e.clientY - this.startY;
-            // this.clearCanvas();
-            // this.ctx.strokeStyle = "rgba(255, 255, 255)"
+            
             const selectedTool = this.selectedTool;
-            // console.log(selectedTool)
 
             if (selectedTool == 'eraser') {
                 const x = e.clientX;
@@ -198,7 +196,7 @@ export class Game {
                 this.clearCanvas();
 
                 const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, this.eraserRadius);
-                gradient.addColorStop(0, "rgba(180, 180, 180, 0.7)");  // light grey center
+                gradient.addColorStop(0, "rgba(180, 180, 180, 0.7)");  
                 gradient.addColorStop(1, "rgba(100, 100, 100, 0.05)");
                 this.ctx.strokeStyle = "rgba(255, 0, 0, 0.5)";
                 this.ctx.lineWidth = 2;
@@ -245,7 +243,6 @@ export class Game {
     findShapeAt(x: number, y: number): Shape | null {
         for (let shape of this.existingShapes) {
             if (shape.type === "rect") {
-                // expand detection slightly to include edges near the eraser circle
                 if (
                     x >= shape.x - this.eraserRadius &&
                     x <= shape.x + shape.width + this.eraserRadius &&
@@ -261,7 +258,6 @@ export class Game {
                 const dy = y - shape.centerY;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                // consider eraser radius as hit tolerance
                 if (distance <= shape.radius + this.eraserRadius) {
                     return shape;
                 }
@@ -276,7 +272,7 @@ export class Game {
                     shape.endX,
                     shape.endY
                 );
-                // eraser radius replaces static 5px tolerance
+
                 if (dist < this.eraserRadius) return shape;
             }
         }
@@ -291,7 +287,6 @@ export class Game {
         x2: number,
         y2: number
     ): number {
-        // project cursor point onto line segment and compute perpendicular distance
         const A = px - x1;
         const B = py - y1;
         const C = x2 - x1;
