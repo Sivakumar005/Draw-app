@@ -47,9 +47,11 @@ export default function Home() {
           <a href="#features" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">Features</a>
           <a href="#demo" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">Demo</a>
           <a href="#pricing" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">Pricing</a>
+          <Link href={"/canvas/6"}>
           <button className="rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
             Get Started
           </button>
+          </Link>
         </div>
       </nav>
 

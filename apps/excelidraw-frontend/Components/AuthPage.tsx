@@ -30,7 +30,7 @@ export function AuthPage({ isSignin }: {
 
                 if (response.token) {
                     tokenStorage.set(response.token);
-                    router.push('/canvas'); 
+                    router.push('/canvas/6'); 
                 } else {
                     setError(response.message || "Sign in failed");
                 }
@@ -51,7 +51,7 @@ export function AuthPage({ isSignin }: {
                     
                     if (signInResponse.token) {
                         tokenStorage.set(signInResponse.token);
-                        router.push('/canvas');
+                        router.push('/canvas/6');
                     }
                 } else {
                     setError(response.message || "Sign up failed");
