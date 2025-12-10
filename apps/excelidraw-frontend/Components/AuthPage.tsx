@@ -21,8 +21,7 @@ export function AuthPage({ isSignin }: {
         setLoading(true);
 
         try {
-            if (isSignin) {
-                
+            if (isSignin) {  
                 const response = await authAPI.SignIn({
                     username: email,
                     password: password,
@@ -30,7 +29,7 @@ export function AuthPage({ isSignin }: {
 
                 if (response.token) {
                     tokenStorage.set(response.token);
-                    router.push('/canvas/6'); 
+                    router.push('/dashboard'); 
                 } else {
                     setError(response.message || "Sign in failed");
                 }
@@ -51,7 +50,7 @@ export function AuthPage({ isSignin }: {
                     
                     if (signInResponse.token) {
                         tokenStorage.set(signInResponse.token);
-                        router.push('/canvas/6');
+                        router.push('/dashboard');
                     }
                 } else {
                     setError(response.message || "Sign up failed");

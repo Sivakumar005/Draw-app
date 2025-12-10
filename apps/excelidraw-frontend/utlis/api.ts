@@ -1,5 +1,6 @@
 // utils/api.ts
 import axios from 'axios';
+import { tokenStorage } from './auth';
 
 const HTTP_BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
@@ -12,6 +13,10 @@ export interface SignUpData {
 export interface SignInData {
   username: string;
   password: string;
+}
+
+export interface createRoomData{
+  name:string;
 }
 
 export const authAPI = {
@@ -35,6 +40,29 @@ export const authAPI = {
           'Content-Type': 'application/json',
         }
       });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+};
+
+export const RoomAPI = {
+  createRoom: async (data: createRoomData) => {
+    try {
+      const token = tokenStorage.get();
+
+      const response = await axios.post(
+        `${HTTP_BACKEND}/create-room`,
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+          }
+        }
+      );
+
       return response.data;
     } catch (error) {
       throw error;

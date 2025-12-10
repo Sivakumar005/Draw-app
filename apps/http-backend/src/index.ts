@@ -124,7 +124,7 @@ app.get("/chats/:roomId",async(req,res)=>{
         messages
     })
 })
-
+ 
 app.get("/room/:slug",async(req,res)=>{
     const slug=req.params.slug;
     const room=await prismaClient.room.findFirst({
@@ -138,4 +138,6 @@ app.get("/room/:slug",async(req,res)=>{
     })
 })
 
-app.listen(3002);
+app.listen(3002,()=>{
+    console.log("server started on port 3002");
+});

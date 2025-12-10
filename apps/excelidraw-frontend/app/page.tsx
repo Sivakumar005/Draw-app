@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import  Navbar  from "@/Components/Navbar";
 
 export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -31,29 +32,7 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-6 lg:px-12">
-        <div className={`flex items-center gap-2 transition-all duration-700 ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 shadow-lg">
-            <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-          </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Excelidraw
-          </span>
-        </div>
-
-        <div className={`hidden md:flex items-center gap-8 transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
-          <a href="#features" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">Features</a>
-          <a href="#demo" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">Demo</a>
-          <a href="#pricing" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">Pricing</a>
-          <Link href={"/canvas/6"}>
-          <button className="rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
-            Get Started
-          </button>
-          </Link>
-        </div>
-      </nav>
+      <Navbar/>
 
       {/* Hero Section */}
       <main className="relative z-10 mx-auto max-w-7xl px-6 pt-20 pb-32 lg:px-12">
