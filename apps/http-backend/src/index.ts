@@ -138,6 +138,18 @@ app.get("/room/:slug",async(req,res)=>{
     })
 })
 
+app.get("/dashboard",middleware, async(req,res)=>{
+    const userId=req.userId;
+    const rooms=await prismaClient.room.findMany({
+        where:{
+            adminId:userId.toString()
+        }
+    });
+    res.json({
+        rooms
+    })
+})
+
 app.listen(3002,()=>{
     console.log("server started on port 3002");
 });

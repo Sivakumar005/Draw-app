@@ -10,16 +10,20 @@ declare global{
     }
 }
 
-export function middleware(req:Request,res:Response,next:NextFunction){
-    const token=req.headers['authorization']||"";
-    const decoded = jwt.verify(token,JWT_SECRET);
+export function middleware(req: Request, res: Response, next: NextFunction) {
+    const token = req.headers['authorization'];
 
-    if(decoded){
-        req.userId=(decoded as JwtPayload ).userId;
-        next()
-    }else{
-        res.status(403).json({
-            message:"unauthorized"
-        })
+    if (!token) {
+        return res.status(403).json({ message: "Token missing" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+        req.userId = decoded.userId;
+        return next();
+    } catch (err) {
+        console.error("JWT verification failed:", err);
+        return res.status(403).json({ message: "Unauthorized" });
     }
 }
+
