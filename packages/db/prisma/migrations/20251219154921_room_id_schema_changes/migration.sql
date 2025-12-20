@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Room" ALTER COLUMN "id" DROP DEFAULT;
+DROP SEQUENCE "Room_id_seq";

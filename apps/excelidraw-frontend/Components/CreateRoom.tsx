@@ -58,7 +58,7 @@ export default function CreateRoomModal({ open, onClose }: CreateRoomModalProps)
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                            className="px-4 py-2 rounded-lg bg-red-500 text-slate-100 hover:bg-gray-300 transition"
                         >
                             Cancel
                         </button>

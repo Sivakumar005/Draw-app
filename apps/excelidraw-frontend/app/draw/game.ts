@@ -313,5 +313,4 @@ export class Game {
         const dy = py - yy;
         return Math.sqrt(dx * dx + dy * dy);
     }
-
 }

@@ -21,7 +21,7 @@ export function AuthPage({ isSignin }: {
         setLoading(true);
 
         try {
-            if (isSignin) {  
+            if (isSignin) {
                 const response = await authAPI.SignIn({
                     username: email,
                     password: password,
@@ -29,12 +29,12 @@ export function AuthPage({ isSignin }: {
 
                 if (response.token) {
                     tokenStorage.set(response.token);
-                    router.push('/dashboard'); 
-                } else {
+                    console.log("Stored token:", tokenStorage.get()); // temp debug
+                    router.push('/dashboard');
+                }else {
                     setError(response.message || "Sign in failed");
                 }
             } else {
-                // Sign Up
                 const response = await authAPI.SignUp({
                     username: email,
                     password: password,
@@ -42,12 +42,11 @@ export function AuthPage({ isSignin }: {
                 });
 
                 if (response.userId) {
-                    // Auto sign in after signup
                     const signInResponse = await authAPI.SignIn({
                         username: email,
                         password: password,
                     });
-                    
+
                     if (signInResponse.token) {
                         tokenStorage.set(signInResponse.token);
                         router.push('/dashboard');
@@ -80,7 +79,7 @@ export function AuthPage({ isSignin }: {
                         {isSignin ? "Sign in to continue your journey" : "Sign up to get started"}
                     </p>
                 </div>
-                
+
                 {error && (
                     <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                         {error}
@@ -93,9 +92,9 @@ export function AuthPage({ isSignin }: {
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                                 Full Name
                             </label>
-                            <input 
+                            <input
                                 id="name"
-                                type="text" 
+                                type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="John Doe"
@@ -104,14 +103,14 @@ export function AuthPage({ isSignin }: {
                             />
                         </div>
                     )}
-                    
+
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                             Email Address
                         </label>
-                        <input 
+                        <input
                             id="email"
-                            type="email" 
+                            type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="you@example.com"
@@ -119,14 +118,14 @@ export function AuthPage({ isSignin }: {
                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition duration-200 placeholder:text-gray-400"
                         />
                     </div>
-                    
+
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                             Password
                         </label>
-                        <input 
+                        <input
                             id="password"
-                            type="password" 
+                            type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
@@ -141,8 +140,8 @@ export function AuthPage({ isSignin }: {
                             </div>
                         )}
                     </div>
-                    
-                    <button 
+
+                    <button
                         type="submit"
                         disabled={loading}
                         className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
@@ -150,12 +149,12 @@ export function AuthPage({ isSignin }: {
                         {loading ? "Processing..." : (isSignin ? "Sign In" : "Sign Up")}
                     </button>
                 </form>
-                
+
                 <div className="mt-6 text-center">
                     <p className="text-sm text-gray-600">
                         {isSignin ? "Don't have an account? " : "Already have an account? "}
-                        <a 
-                            href={isSignin ? "/signup" : "/signin"} 
+                        <a
+                            href={isSignin ? "/signup" : "/signin"}
                             className="text-indigo-600 font-semibold hover:text-indigo-700 hover:underline transition duration-200"
                         >
                             {isSignin ? "Sign Up" : "Sign In"}

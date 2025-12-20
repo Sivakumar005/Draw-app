@@ -1,7 +1,6 @@
 // utils/api.ts
 import axios from 'axios';
 import { tokenStorage } from './auth';
-import { headers } from 'next/headers';
 
 const HTTP_BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
@@ -18,6 +17,10 @@ export interface SignInData {
 
 export interface createRoomData {
   name: string;
+}
+
+export interface joinRoomData {
+  roomId: number;
 }
 
 export const authAPI = {
@@ -69,6 +72,7 @@ export const RoomAPI = {
       throw error;
     }
   },
+  
   getRooms: async () => {
     try {
       const token = tokenStorage.get();
@@ -77,12 +81,46 @@ export const RoomAPI = {
           'Content-Type': 'application/json',
           'Authorization': token
         }
-      })
-      console.log("Token being sent:", tokenStorage.get());
+      });
+      console.log("Available rooms from dashboard:", response.data);
       return response.data;
-    } catch (err) {
-      console.error("Failed to fetch rooms:", err);
+    } catch (err: any) {
+      console.error("Failed to fetch rooms:", err.message);
       throw err;
+    }
+  },
+  
+  joinRoom: async (data: joinRoomData) => {
+    try {
+      const token = tokenStorage.get();
+      
+      // Detailed logging
+      console.log("=== JOIN ROOM DEBUG ===");
+      console.log("1. Input data:", data);
+      console.log("2. Data type:", typeof data.roomId);
+      console.log("3. Backend URL:", `${HTTP_BACKEND}/join-room`);
+      console.log("4. Token:", token ? "Present" : "Missing");
+      console.log("5. Request payload:", JSON.stringify(data));
+      
+      const response = await axios.post(`${HTTP_BACKEND}/join-room`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        }
+      });
+      
+      console.log("6. Response:", response.data);
+      console.log("======================");
+      
+      return response.data;
+    } catch (err: any) {
+      console.error("=== JOIN ROOM ERROR ===");
+      console.error("Status:", err.response?.status);
+      console.error("Error data:", err.response?.data);
+      console.error("Error message:", err.message);
+      console.error("Full error:", err);
+      console.error("======================");
+      throw err; 
     }
   }
 };

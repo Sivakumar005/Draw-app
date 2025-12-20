@@ -12,6 +12,21 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+async function generateRoomId(
+  prisma: typeof prismaClient
+): Promise<number> {
+  while (true) {
+    const roomId = Math.floor(100000 + Math.random() * 900000);
+
+    const exists = await prisma.room.findUnique({
+      where: { id: roomId }
+    });
+
+    if (!exists) return roomId;
+  }
+}
+
+
 app.post('/signup', async (req, res) => {
     const parsedData = CreateUserSchema.safeParse(req.body);
     if (!parsedData.success) {
@@ -91,8 +106,10 @@ app.post('/create-room', middleware, async (req, res) => {
 
     const userId = req.userId;
     try {
+        const roomId=await generateRoomId(prismaClient);
         const room = await prismaClient.room.create({
             data: {
+                id:roomId,
                 slug: parsedData.data.name,
                 adminId: userId.toString(),
                 createdAt: new Date().toISOString()
@@ -147,6 +164,29 @@ app.get("/dashboard",middleware, async(req,res)=>{
     });
     res.json({
         rooms
+    })
+})
+
+app.post("/join-room",middleware,async(req,res)=>{
+    const {roomId}=req.body;
+    if(!roomId || typeof roomId!=="number"){
+        return res.status(400).json({
+            message:"Invalid room number"
+        })
+    }
+    const room=await prismaClient.room.findUnique({
+        where:{
+            id:roomId
+        }
+    })
+    if(!room){
+        return res.status(404).json({
+            message:"Room not found"
+        })
+    }
+    return res.json({
+        roomId:room.id,
+        slug:room.slug
     })
 })
 
