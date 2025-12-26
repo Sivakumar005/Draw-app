@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import CreateRoomModal from "@/Components/CreateRoom";
 import GetRooms from "@/Components/GetRooms";
@@ -15,7 +14,6 @@ export default function Dashboard() {
             <Navbar/>
             <div className="p-6">
                 <div className="flex gap-6 float-end">
-
                     <button
                         onClick={() => setOpenModal(true)}
                         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
